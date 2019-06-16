@@ -3,6 +3,8 @@ package com.example.unsplash
 import com.example.unsplash.api.UnsplashApiService
 import com.example.unsplash.repository.UnsplashPostRepository
 import com.example.unsplash.repository.byPage.InMemoryByPageKeyRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 
 interface ServiceLocator {
     companion object {
@@ -20,16 +22,20 @@ interface ServiceLocator {
 
     val unsplashApi: UnsplashApiService
     val repository: UnsplashPostRepository
+    val repoScope: CoroutineScope
 }
 
 /**
  * default implementation of ServiceLocator that uses production endpoints.
  */
 class AppServiceLocator : ServiceLocator {
+    override val repoScope by lazy {
+        CoroutineScope(Dispatchers.IO)
+    }
     override val unsplashApi by lazy {
         UnsplashApiService.create()
     }
     override val repository by lazy {
-        InMemoryByPageKeyRepository(unsplashApi = unsplashApi)
+        InMemoryByPageKeyRepository(unsplashApi = unsplashApi, coroutineScope = repoScope)
     }
 }

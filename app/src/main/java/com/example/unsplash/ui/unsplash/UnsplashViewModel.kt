@@ -3,8 +3,8 @@ package com.example.unsplash.ui.unsplash
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.example.unsplash.repository.Listing
 import com.example.unsplash.model.UnsplashPost
+import com.example.unsplash.repository.Listing
 import com.example.unsplash.repository.UnsplashPostRepository
 
 class UnsplashViewModel(val repository: UnsplashPostRepository) : ViewModel() {
@@ -18,11 +18,16 @@ class UnsplashViewModel(val repository: UnsplashPostRepository) : ViewModel() {
     }
 
     fun showPosts() {
-        repoResult.value = repository.getPosts("", 30)
+        repoResult.value = repository.getPosts(30)
     }
 
     fun retry() {
         val listing = repoResult.value
         listing?.retry?.invoke()
+    }
+
+    override fun onCleared() {
+        repository.cancel()
+        super.onCleared()
     }
 }

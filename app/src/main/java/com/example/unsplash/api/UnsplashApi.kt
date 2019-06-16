@@ -12,7 +12,7 @@ class UnsplashApiService private constructor(private val client: HttpClient) {
      *
      * @param pageIndex page number to retrieve
      */
-    suspend fun getPage(
+    fun getPage(
         pageIndex: Int
     ) = client.get(
         path = "photos",

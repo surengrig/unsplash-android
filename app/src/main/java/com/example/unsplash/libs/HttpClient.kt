@@ -1,8 +1,5 @@
 package com.example.unsplash.libs
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.withContext
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
@@ -46,12 +43,8 @@ class HttpClient private constructor(
      * @param path relative path
      * @param params list of key-value pair for request queries, combines with baseParams
      */
-    suspend fun get(path: String = "", params: List<Pair<String, String>> = listOf()): Response? {
-        return coroutineScope {
-            withContext(Dispatchers.IO) {
-                makeRequest(RequestType.GET, buildUrl(baseUrl, baseParams, params, path))
-            }
-        }
+    fun get(path: String = "", params: List<Pair<String, String>> = listOf()): Response? {
+        return makeRequest(RequestType.GET, buildUrl(baseUrl, baseParams, params, path))
     }
 
     /**
